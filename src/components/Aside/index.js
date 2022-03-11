@@ -74,6 +74,39 @@ export const Aside = () => {
 
         </section>
 
+        <section style={{ borderBottom: '1px solid #E1E1E1', }}>
+
+          <div style={{ display: "flex", flexDirection: 'column', alignItems: 'center', paddingTop: '20px', marginBottom: '36px', }}>
+
+            <div style={{ display: "flex", alignItems: 'center', justifyContent: 'space-between', width: '100%', paddingBottom: '30px' }}>
+              <span style={{ color: '#333333', fontWeight: 'bold' }}>Empresas</span>
+              <IoMdArrowDropright color='#333333' />
+            </div>
+
+            <div style={{ display: "flex", width: '100%', paddingBottom: '16px' }}>
+              <img src={callIcon} alt="icon" />
+              <a href="#" style={{ paddingLeft: '15px', textDecoration: "none", color: '#333333' }}>Agenda telefonica</a>
+            </div>
+
+            <div style={{ display: "flex", width: '100%', paddingBottom: '16px' }}>
+              <img src={editIcon} alt="icon" />
+              <a href="#" style={{ paddingLeft: '15px', textDecoration: "none", color: '#333333' }}>Cadastro</a>
+            </div>
+
+            <div style={{ display: "flex", width: '100%', paddingBottom: '16px' }}>
+              <img src={bookIcon} alt="icon" />
+              <a href="#" style={{ paddingLeft: '15px', textDecoration: "none", color: '#333333' }}>NF-e</a>
+            </div>
+
+            <div style={{ display: "flex", width: '100%', paddingBottom: '16px' }}>
+              <img src={bookIcon} alt="icon" />
+              <a href="#" style={{ paddingLeft: '15px', textDecoration: "none", color: '#333333' }}>NFC-e</a>
+            </div>
+
+          </div>
+
+        </section>
+
       </main>
 
       <footer style={{ display: "flex", alignItems: 'center', justifyContent: 'flex-start', width: '100%', }}>
