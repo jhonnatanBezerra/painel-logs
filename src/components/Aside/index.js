@@ -33,6 +33,8 @@ export const Aside = () => {
             <a href="#" style={{ paddingLeft: '15px', textDecoration: "none", color: '#333333' }}>Telemetria</a>
           </span>
 
+
+
           <span style={{ display: 'flex', marginBottom: '36px' }}>
             <img src={faqIcon} alt="icon" />
             <a href="#" style={{ paddingLeft: '15px', textDecoration: "none", color: '#333333' }}>FAQ</a>
