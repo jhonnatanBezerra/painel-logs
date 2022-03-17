@@ -101,11 +101,7 @@ export const CompanyModules = () => {
   return (
     <Fragment>
 
-      {/* <Header /> */}
-
       <AsideMenu>
-
-
 
         {isFinish ?
 

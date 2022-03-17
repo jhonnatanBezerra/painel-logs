@@ -21,11 +21,8 @@ export const ModalErros = ({ open, closeModal, data }) => {
 
   };
 
-  // const [error, setError] = useState(data.error);
 
-
-
-  function replaceJSX(str, find, replace) {
+  const replaceJSX = (str, find, replace) => {
     const parts = str.split(find);
     const result = [];
     for (let i = 0; i < parts.length; i++) {
@@ -61,10 +58,9 @@ export const ModalErros = ({ open, closeModal, data }) => {
                   collapsed={false} theme={"pop"}
                   enableClipboard={false} displayDataTypes={false} />
                 :
-                // data.error.replaceAll('\\r\\n',)
+
                 replaceJSX(data.error, '\\r\\n', <br />)
-                // data.error.replaceAll('\r', `${`\n`}`)
-                // data.error
+
               }
             </>
           }

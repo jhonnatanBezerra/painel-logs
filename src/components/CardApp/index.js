@@ -6,7 +6,7 @@ import { CircularProgress } from '@mui/material'
 
 export const CardApp = ({ titleApp, numberOfLogs }) => {
   return (
-    <div style={{ minWidth: '300px', height: '105px', background: '#FFF', borderRadius: '8px', display: 'flex', alignItems: 'center', padding: '15px', marginRight: '40px' }}>
+    <div style={{ minWidth: '300px', width: '300px', height: '105px', background: '#FFF', borderRadius: '8px', display: 'flex', alignItems: 'center', padding: '15px' }}>
 
       <img src={iconCard} alt="icon" />
 

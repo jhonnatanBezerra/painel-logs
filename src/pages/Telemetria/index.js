@@ -1,13 +1,14 @@
-import React, { Fragment, useEffect, useState } from 'react';
-import teleIcon from '../../assets/icons/telemetria.svg'
-import { CardApp } from '../CardApp';
-import axios from 'axios';
-import MdPhone from '@mui/icons-material/SwapHoriz';
-import { Table, Chip, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Backdrop, CircularProgress, Stack } from '@mui/material'
-import { format } from 'date-fns';
-import './styles.css';
-import { ModalErros } from '../ModalErros';
+import React, { useEffect, useState } from 'react';
 
+import { Layout } from '../../components/Layout';
+import { CardApp } from '../../components/CardApp';
+import { format } from 'date-fns';
+import axios from 'axios';
+import { ModalErros } from '../../components/ModalErros';
+import { Backdrop, Chip, CircularProgress, Stack } from '@mui/material';
+import MdPhone from '@mui/icons-material/SwapHoriz';
+import './styles.css';
+import teleIcon from '../../assets/icons/telemetria.svg';
 
 export const Telemetria = () => {
 
@@ -112,7 +113,6 @@ export const Telemetria = () => {
 
   }
 
-
   const handleDeletFilter = (filter) => {
     if (filter === 'log') {
       setTagLog('')
@@ -139,29 +139,26 @@ export const Telemetria = () => {
 
 
 
-
   return (
-    <Fragment>
+    <Layout pageName={'Telemetria'} icon={teleIcon} >
 
       <ModalErros open={modal} closeModal={setModal} data={selectedData} />
 
 
-      <div style={{ padding: '30px 35px 10px', width: 'calc(100vw - 275px)', display: 'flex', flexDirection: 'column', }}>
 
-        <div style={{ display: 'flex', alignItems: 'center', }}>
-          <h1 style={{ paddingRight: "16px", fontSize: '48px', color: '#6D6D6D' }}>Telemetria</h1>
-          <img src={teleIcon} alt="icon" />
+      <div style={{ overflowY: 'scroll' }}>
+
+        <div style={{ display: 'flex', gap: '20px', overflow: 'scroll', maxWidth: 'calc( 100vw - 340px )', minHeight: '110px' }}>
+          <CardApp numberOfLogs={10} titleApp={'PowerAdmin Web'} />
+          <CardApp numberOfLogs={10} titleApp={'PowerAdmin Web'} />
+          <CardApp numberOfLogs={10} titleApp={'PowerAdmin Web'} />
+          <CardApp numberOfLogs={10} titleApp={'PowerAdmin Web'} />
+          <CardApp numberOfLogs={10} titleApp={'PowerAdmin Web'} />
+          <CardApp numberOfLogs={10} titleApp={'PowerAdmin Web'} />
+          <CardApp numberOfLogs={10} titleApp={'PowerAdmin Web'} />
         </div>
 
-        <div className='cardsApps scroll-x' >
-          <CardApp titleApp={'PowerAdmin Mobile'} numberOfLogs={logs.powerAdminMobile} />
-          <CardApp titleApp={'Comanda JB'} numberOfLogs={logs.comanda} />
-          <CardApp titleApp={'Servidor mormot'} numberOfLogs={logs.mormot} />
-          <CardApp titleApp={'Servidor whatsapp'} numberOfLogs={logs.whatsapp} />
-          <CardApp titleApp={'PowerAdmin Web'} numberOfLogs={logs.powerAdminWeb} />
-        </div>
-
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <div style={{}} >
 
           <div style={{ padding: '20px 0', }}>
             <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }} >
@@ -171,81 +168,57 @@ export const Telemetria = () => {
             </Stack>
           </div>
 
-          <div style={{ display: 'flex', maxHeight: 'calc(100vh - 340px)' }}>
+          {isFinish ?
 
-            {isFinish ?
+            <Backdrop
+              sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+              open={isFinish}
+              onClick={null}
+            >
+              <CircularProgress color="inherit" />
+              <h1 style={{ marginLeft: '16px' }}>Carregando dados ...</h1>
+            </Backdrop>
 
-              <Backdrop
-                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                open={isFinish}
-                onClick={null}
-              >
-                <CircularProgress color="inherit" />
-                <h1 style={{ marginLeft: '16px' }}>Carregando dados ...</h1>
-              </Backdrop>
+            :
 
-              :
+            <table>
+              <tr>
+                <th style={{ padding: '35px', color: '#1f4173', textAlign: 'center', fontWeight: 'bold' }}>ID</th>
+                <th style={{ padding: '35px', color: '#1f4173', textAlign: 'center', fontWeight: 'bold' }}>APP</th>
+                <th style={{ padding: '35px', color: '#1f4173', textAlign: 'center', fontWeight: 'bold' }}>Empresa</th>
+                <th style={{ padding: '35px', color: '#1f4173', textAlign: 'center', fontWeight: 'bold' }}>LOG</th>
 
-              <TableContainer className='scroll-y' component={Paper}  >
-                <Table aria-label="caption table">
-                  <TableHead >
-                    <TableRow>
-                      <TableCell>ID</TableCell>
-                      <TableCell align="center">APP</TableCell>
-                      <TableCell align="center">Empresa</TableCell>
-                      <TableCell align="center">Log</TableCell>
-                      {type === 'log' &&
-                        <TableCell align="center">Contador de uso</TableCell>
-                      }
-                      {type === 'error' &&
-                        <TableCell align="center">Detalhamento do erro</TableCell>
-                      }
+                {type === 'log' &&
+                  <th style={{ padding: '35px', color: '#1f4173', textAlign: 'center', fontWeight: 'bold' }}>Contador de uso</th>
+                }
 
+                {type === 'error' &&
+                  <th style={{ padding: '35px', color: '#1f4173', textAlign: 'center', fontWeight: 'bold' }}>Detalhamento do erro</th>
+                }
+                <th style={{ padding: '35px', color: '#1f4173', textAlign: 'center', fontWeight: 'bold' }}>Último registro</th>
+              </tr>
 
-                      <TableCell align="center">Ultimo registro</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {data.map((log) => {
+              {data.map((log) => (
+                <tr key={log.id}>
+                  <td td style={{ padding: '35px', color: '#1f4173', borderTop: '1px solid #e1e1e1', textAlign: 'center' }} >{log.id}</td>
+                  <td style={{ padding: '35px', color: '#1f4173', borderTop: '1px solid #e1e1e1', textAlign: 'center' }}>{log.app}</td>
+                  <td style={{ padding: '35px', color: '#1f4173', borderTop: '1px solid #e1e1e1', textAlign: 'center' }} onClick={e => { setSelectedCompany(e.target.innerText); setTagLog('') }} >{log.empresa}</td>
+                  <td style={{ padding: '35px', color: '#1f4173', borderTop: '1px solid #e1e1e1', textAlign: 'center' }} onClick={e => { setTagLog(e.target.innerText); setSelectedCompany(log.empresa) }}>{log.id_action}</td>
+                  {type === 'log' &&
+                    <td style={{ padding: '35px', color: '#1f4173', borderTop: '1px solid #e1e1e1', textAlign: 'center' }}>{log.quantity_by_date}</td>
+                  }
+                  {type === 'error' &&
+                    <td style={{ padding: '35px', color: '#1f4173', borderTop: '1px solid #e1e1e1', textAlign: 'center' }} onClick={() => { setModal(true); setSelectedData(log); }} >Ver detalhes</td>
+                  }
+                  <td style={{ padding: '35px', color: '#1f4173', borderTop: '1px solid #e1e1e1', textAlign: 'center' }}>{format(new Date(log.created_at), 'dd/MM/yyyy HH:mm')}</td>
+                </tr>
+              ))}
 
-
-                      return (
-                        <TableRow key={log.id}>
-                          <TableCell component="th" scope="row">{log.id} </TableCell>
-                          <TableCell align="center">{log.app}</TableCell>
-                          <TableCell align="center" style={styles.pointer} onClick={e => { setSelectedCompany(e.target.innerText); setTagLog('') }} >{log.empresa}</TableCell>
-                          <TableCell align="center" style={styles.pointer} onClick={e => { setTagLog(e.target.innerText); setSelectedCompany(log.empresa) }}>{log.id_action}</TableCell>
-                          {type === 'log' &&
-                            <TableCell align="center">{log.quantity_by_date}</TableCell>
-                          }
-                          {type === 'error' &&
-                            <TableCell align="center" style={styles.pointer} onClick={() => { setModal(true); setSelectedData(log); }} >Ver detalhes</TableCell>
-                          }
-                          {/* <TableCell align="center">{allLastDate ? allLastDate[0].lastDate : 'null'}</TableCell> */}
-                          <TableCell align="center">{format(new Date(log.created_at), 'dd/MM/yyyy HH:mm')}</TableCell>
-
-                        </TableRow>
-                      )
-                    })}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-
-            }
-          </div>
-
+            </table>
+          }
         </div>
-
-
       </div>
 
-    </Fragment>
-
+    </Layout>
   );
-}
-
-const styles = {
-  pointer: {
-    cursor: 'pointer'
-  }
 }

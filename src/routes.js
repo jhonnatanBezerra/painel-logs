@@ -1,18 +1,13 @@
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-
-import { Home } from './pages/Home';
-import { CompanyModules } from './pages/CompanyModules';
-import { Test } from './pages/Test';
-import { TableTest } from './pages/TableTest';
+import { Telemetria } from './pages/Telemetria';
+import { Agenda } from './pages/Agenda';
 
 export const Routes = () => {
   return (
     <BrowserRouter>
       <Switch>
-        <Route path="/" exact component={Test} />
-        <Route path="/home" exact component={Home} />
-        <Route path="/modules" exact component={CompanyModules} />
-        <Route path="/telemetria" exact component={TableTest} />
+        <Route path="/" exact component={Telemetria} />
+        <Route path="/agenda" exact component={Agenda} />
 
       </Switch>
     </BrowserRouter>

@@ -1,0 +1,10 @@
+table {
+  border-collapse: collapse;
+  width: 100%;
+  padding-top: 50px;
+  background: #fff;
+  -webkit-border-radius: 25px;
+  -moz-border-radius: 25px;
+  border-radius: 25px;
+  padding: 35px;
+}

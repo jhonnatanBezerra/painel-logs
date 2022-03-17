@@ -1,0 +1,27 @@
+table {
+  border-collapse: collapse;
+  width: 100%;
+  padding-top: 50px;
+  background: #fff;
+  -webkit-border-radius: 25px;
+  -moz-border-radius: 25px;
+  border-radius: 25px;
+  padding: 35px;
+}
+
+table tr th {
+  padding: 35px;
+  color: #1f4173;
+  font-weight: bold;
+}
+
+table tr td {
+  padding: 35px;
+  color: #1f4173;
+  border-top: 1px solid #e1e1e1;
+}
+
+td,
+th {
+  text-align: center;
+}
