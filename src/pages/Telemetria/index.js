@@ -146,16 +146,15 @@ export const Telemetria = () => {
 
 
 
-      <div style={{ overflowY: 'scroll' }}>
+      <div style={{ overflowY: 'scroll', width: '100%' }}>
+        {/* <div style={{ overflowY: 'scroll' }}> */}
 
-        <div style={{ display: 'flex', gap: '20px', overflow: 'scroll', maxWidth: 'calc( 100vw - 340px )', minHeight: '110px' }}>
-          <CardApp numberOfLogs={10} titleApp={'PowerAdmin Web'} />
-          <CardApp numberOfLogs={10} titleApp={'PowerAdmin Web'} />
-          <CardApp numberOfLogs={10} titleApp={'PowerAdmin Web'} />
-          <CardApp numberOfLogs={10} titleApp={'PowerAdmin Web'} />
-          <CardApp numberOfLogs={10} titleApp={'PowerAdmin Web'} />
-          <CardApp numberOfLogs={10} titleApp={'PowerAdmin Web'} />
-          <CardApp numberOfLogs={10} titleApp={'PowerAdmin Web'} />
+        <div style={{ display: 'flex', gap: '20px', overflow: 'scroll', maxWidth: '100%', minHeight: '110px' }}>
+          <CardApp titleApp={'PowerAdmin Mobile'} numberOfLogs={logs.powerAdminMobile} />
+          <CardApp titleApp={'Comanda JB'} numberOfLogs={logs.comanda} />
+          <CardApp titleApp={'Servidor mormot'} numberOfLogs={logs.mormot} />
+          <CardApp titleApp={'Servidor whatsapp'} numberOfLogs={logs.whatsapp} />
+          <CardApp titleApp={'PowerAdmin Web'} numberOfLogs={logs.powerAdminWeb} />
         </div>
 
         <div style={{}} >

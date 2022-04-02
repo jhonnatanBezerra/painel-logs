@@ -1,0 +1,59 @@
+.wrapperMenuOpen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px;
+  margin-bottom: 36px;
+  transition: all 0.3s;
+}
+
+.wrapperMenuClosed {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px;
+  margin-bottom: 0px;
+  transition: all 0.3s;
+}
+
+.titleMenuContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding-bottom: 30px;
+  padding-right: 15px;
+  cursor: pointer;
+}
+
+.titleMenu {
+  color: #333333;
+  font-weight: bold;
+}
+
+.notTransformIcon {
+  transform: rotate(0deg);
+  transition: transform 0.3s;
+}
+
+.transformIcon {
+  transform: rotate(90deg);
+  transition: transform 0.3s;
+}
+
+.optionMenu {
+  display: flex;
+  width: 100%;
+  padding-bottom: 16px;
+}
+
+.optionHidden {
+  display: none;
+  padding-bottom: 0;
+}
+
+.linkOption {
+  padding-left: 15px;
+  text-decoration: none;
+  color: #333333;
+}

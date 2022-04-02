@@ -11,10 +11,21 @@ import faqIcon from '../../assets/icons/question.svg'
 import { IoMdArrowDropright } from 'react-icons/io'
 
 import './styles.css';
+import { Menu, OptionMenu } from '../OptionMenu';
+
+const optionCompany = [
+  { name: 'Cadastro', icon: editIcon },
+  { name: 'NF-e', icon: bookIcon },
+  { name: 'NFC-e', icon: bookIcon },
+]
+
+const optionAttendance = [
+  { name: 'Cadastro', icon: editIcon },
+  { name: 'Consulta', icon: bookIcon },
+]
 
 export const Layout = ({ children, pageName, icon }) => {
 
-  const data = Array(150).fill("");
 
   return (
     <Fragment>
@@ -62,86 +73,11 @@ export const Layout = ({ children, pageName, icon }) => {
 
               </div>
 
-              <div style={{ borderBottom: '1px solid #E1E1E1', }}>
+              <Menu title={'Empresas'} listOption={optionCompany} />
 
-                <div style={{ display: "flex", flexDirection: 'column', alignItems: 'center', paddingTop: '20px', marginBottom: '36px', }}>
+              <Menu title={'Atendimento'} listOption={optionAttendance} />
 
-                  <div style={{ display: "flex", alignItems: 'center', justifyContent: 'space-between', width: '100%', paddingBottom: '30px', paddingRight: '15px' }}>
-                    <span style={{ color: '#333333', fontWeight: 'bold' }}>Empresas</span>
-                    <IoMdArrowDropright color='#333333' />
-                  </div>
-
-                  <div style={{ display: "flex", width: '100%', paddingBottom: '16px' }}>
-                    <img src={editIcon} alt="icon" />
-                    <a href="#" style={{ paddingLeft: '15px', textDecoration: "none", color: '#333333' }}>Cadastro</a>
-                  </div>
-
-                  <div style={{ display: "flex", width: '100%', paddingBottom: '16px' }}>
-                    <img src={bookIcon} alt="icon" />
-                    <a href="#" style={{ paddingLeft: '15px', textDecoration: "none", color: '#333333' }}>NF-e</a>
-                  </div>
-
-                  <div style={{ display: "flex", width: '100%', paddingBottom: '16px' }}>
-                    <img src={bookIcon} alt="icon" />
-                    <a href="#" style={{ paddingLeft: '15px', textDecoration: "none", color: '#333333' }}>NFC-e</a>
-                  </div>
-
-                </div>
-
-              </div>
-
-              <div style={{ borderBottom: '1px solid #E1E1E1', }}>
-
-                <div style={{ display: "flex", flexDirection: 'column', alignItems: 'center', paddingTop: '20px', marginBottom: '36px', }}>
-
-                  <div style={{ display: "flex", alignItems: 'center', justifyContent: 'space-between', width: '100%', paddingBottom: '30px', paddingRight: '15px' }}>
-                    <span style={{ color: '#333333', fontWeight: 'bold' }}>Atendimento</span>
-                    <IoMdArrowDropright color='#333333' />
-                  </div>
-
-                  <div style={{ display: "flex", width: '100%', paddingBottom: '16px' }}>
-                    <img src={editIcon} alt="icon" />
-                    <a href="#" style={{ paddingLeft: '15px', textDecoration: "none", color: '#333333' }}>Cadastro</a>
-                  </div>
-
-                  <div style={{ display: "flex", width: '100%', paddingBottom: '16px' }}>
-                    <img src={bookIcon} alt="icon" />
-                    <a href="#" style={{ paddingLeft: '15px', textDecoration: "none", color: '#333333' }}>Consulta</a>
-                  </div>
-
-
-
-                </div>
-
-              </div>
-
-              <div style={{ borderBottom: '1px solid #E1E1E1', }}>
-
-                <div style={{ display: "flex", flexDirection: 'column', alignItems: 'center', paddingTop: '20px', marginBottom: '36px', }}>
-
-                  <div style={{ display: "flex", alignItems: 'center', justifyContent: 'space-between', width: '100%', paddingBottom: '30px', paddingRight: '15px' }}>
-                    <span style={{ color: '#333333', fontWeight: 'bold' }}>Empresas</span>
-                    <IoMdArrowDropright color='#333333' />
-                  </div>
-
-                  <div style={{ display: "flex", width: '100%', paddingBottom: '16px' }}>
-                    <img src={editIcon} alt="icon" />
-                    <a href="#" style={{ paddingLeft: '15px', textDecoration: "none", color: '#333333' }}>Cadastro</a>
-                  </div>
-
-                  <div style={{ display: "flex", width: '100%', paddingBottom: '16px' }}>
-                    <img src={bookIcon} alt="icon" />
-                    <a href="#" style={{ paddingLeft: '15px', textDecoration: "none", color: '#333333' }}>NF-e</a>
-                  </div>
-
-                  <div style={{ display: "flex", width: '100%', paddingBottom: '16px' }}>
-                    <img src={bookIcon} alt="icon" />
-                    <a href="#" style={{ paddingLeft: '15px', textDecoration: "none", color: '#333333' }}>NFC-e</a>
-                  </div>
-
-                </div>
-
-              </div>
+              <Menu title={'Banco de conhecimento'} listOption={optionAttendance} />
 
 
             </section>
@@ -154,7 +90,7 @@ export const Layout = ({ children, pageName, icon }) => {
           </div>
         </header>
 
-        <div style={{ display: 'flex', flexDirection: "column", maxHeight: '100vh', padding: '10px 30px 10px 30px' }}>
+        <div style={{ display: 'flex', flexDirection: "column", maxHeight: '100vh', padding: '10px 30px', width: "100%" }}>
 
           <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'flex-start', position: 'sticky', top: '0' }}>
             <h1 style={{ fontSize: '50px', paddingRight: '10px' }}>{pageName}</h1>

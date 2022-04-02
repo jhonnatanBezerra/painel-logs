@@ -1,0 +1,7 @@
+.MuiTextField-root {
+  border-radius: 8px;
+}
+
+.MuiTextField-root > div {
+  border-radius: 8px;
+}

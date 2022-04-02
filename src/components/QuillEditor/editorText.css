@@ -1,0 +1,138 @@
+/*Ajustar o tamanho do editor de texto*/
+
+.quill {
+  flex: 1;
+  overflow-y: scroll;
+  width: 100%;
+}
+
+/* ::-webkit-scrollbar {
+  background: #ccc;
+  width: 1px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #aaa;
+} */
+
+/* Tamanho e tipo da fonte padrão (ao inicializar o editor) deve ser especificada nesse campo. Caso for mudado o padrão de tamanho ou fonte
+deve ser alterado esse campo */
+.ql-container {
+  font-size: 18px !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+}
+
+.ql-container.ql-snow {
+  border-top: none !important;
+}
+
+.ql-editor {
+  min-height: 30em;
+  height: 100%;
+}
+
+/* Ajustar os font-family */
+
+.ql-font-arial,
+.ql-font span[data-value="arial"]::before {
+  font-family: Arial, sans-serif;
+}
+
+.ql-font-comic-sans,
+.ql-font span[data-value="comic-sans"]::before {
+  font-family: "Comic Sans MS", cursive, sans-serif;
+}
+
+.ql-font-courier-new,
+.ql-font span[data-value="courier-new"]::before {
+  font-family: "Courier New";
+}
+
+.ql-font-georgia,
+.ql-font span[data-value="georgia"]::before {
+  font-family: Georgia, serif;
+}
+
+.ql-font-helvetica,
+.ql-font span[data-value="helvetica"]::before {
+  font-family: Helvetica, sans-serif;
+}
+
+.ql-font-lucida,
+.ql-font span[data-value="lucida"]::before {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+
+.ql-font-lobster,
+.ql-font span[data-value="lobster"]::before {
+  font-family: "Lobster", cursive;
+}
+
+.ql-font-allison,
+.ql-font span[data-value="allison"]::before {
+  font-family: "Allison", cursive;
+}
+
+.ql-font-roboto,
+.ql-font span[data-value="roboto"]::before {
+  font-family: "Roboto", sans-serif;
+}
+
+.ql-font-architects,
+.ql-font span[data-value="architects"]::before {
+  font-family: "Architects Daughter", cursive;
+}
+
+/* Ajustar tamanho das fontes */
+
+.ql-size-8px {
+  font-size: 8px !important;
+}
+
+.ql-size-12px {
+  font-size: 12px !important;
+}
+
+.ql-size-14px {
+  font-size: 14px !important;
+}
+
+.ql-size-18px {
+  font-size: 18px !important;
+}
+
+.ql-size-20px {
+  font-size: 20px !important;
+}
+
+.ql-size-22px {
+  font-size: 22px !important;
+}
+
+.ql-size-24px {
+  font-size: 24px !important;
+}
+
+.ql-size-32px {
+  font-size: 32px !important;
+}
+
+.ql-size-40px {
+  font-size: 40px !important;
+}
+
+/* Sublinhar  dados quando a caixa do checkbox estiver marcada*/
+/* .ql-editor ul[data-checked="true"] li {
+  text-decoration: line-through;
+} */
+
+/* ##Exemplos:
+
+.ql-size-medium,
+.ql-size span[data-value="medium"]::before {
+  font-size: 18px !important;
+}
+
+Esse exemplo acima aplica o tamanho da fonte tanto no editor de texto quando na barra de seleção dos tamanhos
+ */
