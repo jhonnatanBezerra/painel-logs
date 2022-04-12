@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { WrapperAside, FooterAsideWrapper, HeaderAsideWrapper, MainAsideWrapper, DirectLinksWrapper } from './styles.js';
 import { MenuWrapper, TitleMenu, ListMenu, ListItem } from './styles.js';
 import Logo from '../../assets/images/logo2.png';
-
 import { GrHomeRounded } from 'react-icons/gr'
 import { GoGraph } from 'react-icons/go';
 import { GiNotebook } from 'react-icons/gi';
@@ -120,14 +119,7 @@ const Menu = ({ title, listOption }) => {
           </ListItem>
 
         ))}
-
-
-
-
       </ListMenu>
-
-
-
 
     </MenuWrapper>
   )

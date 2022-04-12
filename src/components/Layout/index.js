@@ -8,7 +8,8 @@ import callIcon from '../../assets/icons/call.svg'
 import bookIcon from '../../assets/icons/bookmark.svg'
 import editIcon from '../../assets/icons/edit.svg'
 import faqIcon from '../../assets/icons/question.svg'
-import { IoMdArrowDropright } from 'react-icons/io'
+import { IoMdArrowDropright, IoIosArrowDropdown } from 'react-icons/io'
+import { IoExitOutline, } from 'react-icons/io5';
 
 import './styles.css';
 import { Menu, OptionMenu } from '../OptionMenu';
@@ -83,8 +84,12 @@ export const Layout = ({ children, pageName, icon }) => {
             </section>
 
             <section style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '15px 15px 15px 0' }}>
-              <img src={logoutIcon} alt="icon" />
-              <span style={{ color: '#333333', fontWeight: 'bold', paddingLeft: '15px' }}>Sair</span>
+              <div style={{}}>
+                <span style={{ fontWeight: 'bold', textAlign: 'center' }}>Jhonnatan Bezerra</span>
+                <p style={{ fontSize: '.8rem' }}>Programação</p>
+              </div>
+
+              <IoExitOutline style={{ fontSize: '1.5rem', marginLeft: '0.5rem', cursor: 'pointer' }} />
             </section>
 
           </div>
@@ -92,7 +97,7 @@ export const Layout = ({ children, pageName, icon }) => {
 
         <div style={{ display: 'flex', flexDirection: "column", maxHeight: '100vh', padding: '10px 30px', width: "100%" }}>
 
-          <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'flex-start', position: 'sticky', top: '0' }}>
+          <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'flex-start', position: 'sticky', top: '0', background: '#FFF', padding: '0 15px' }}>
             <h1 style={{ fontSize: '50px', paddingRight: '10px' }}>{pageName}</h1>
             <img src={icon} alt="icon" style={{ width: '35px', height: '35px' }} />
           </div>

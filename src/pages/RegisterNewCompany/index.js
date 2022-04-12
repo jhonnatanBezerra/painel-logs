@@ -18,10 +18,17 @@ import editIcon from '../../assets/icons/edit.svg'
 import axios from 'axios'
 import { format, addDays, addMonths } from "date-fns";
 
+import { Link, useHistory, } from "react-router-dom";
+
 const planos = [
   { id: '01', nome: 'Plano Físcal', mountPrice: 145.00, instalation: 380.00 },
   { id: '02', nome: 'Plano Essencial', mountPrice: 185.00, instalation: 580.00 },
   { id: '03', nome: 'Plano Pró', mountPrice: 225.00, instalation: 680.00 },
+]
+
+const paymentMethods = [
+  { id: '01', nome: "Pix", },
+  { id: '02', nome: "Boleto" }
 ]
 
 const valueForComputer = 25.00
@@ -29,13 +36,23 @@ const valueForComputer = 25.00
 export const RegisterNewCompany = () => {
 
   const [cnpj, setCnpj] = useState();
-  const [dataCompany, setDataCompany] = useState([]);
-  const [dataCity, setDataCity] = useState([])
-  const [isReady, setIsReady] = useState(false);
+  // novos dados
   const [currentDate] = useState(new Date());
-  const [dataContract, setDataContract] = useState({});
-  const [ie, setIe] = useState('');
   const inputRef = useRef(null);
+  const [isReady, setIsReady] = useState(false);
+  const [dataQueryCNPJ, setDataQueryCNPJ] = useState([]);
+  const [dataQueryCityAndState, setDataQueryCityAndState] = useState([]);
+  const [dataQueryIE, setDataQueryCNPJIE] = useState([]);
+  const [dataContact, setDataContact] = useState([]);
+  const [dataOwner, setDataOwner] = useState([]);
+  const [dataContract, setDataContract] = useState({});
+
+  const [selectedPlan, setSelectedPlan] = useState(planos[1].nome);
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(paymentMethods[0].nome);
+  const [error, setError] = useState('');
+
+
+  const history = useHistory();
 
 
 
@@ -66,21 +83,25 @@ export const RegisterNewCompany = () => {
     try {
 
       const document = cnpj.replaceAll('.', '').replaceAll('/', '').replaceAll('-', '');
+      setError('')
 
-      if (document !== dataCompany.cnpj && document !== '' && cnpj !== undefined) {
 
-        setIsReady(true)
-        const { data } = await axios.get(`https://brasilapi.com.br/api/cnpj/v1/${document}`);
-        console.log('DADOS CNPJ ========================', data);
-        setDataCompany(data);
-        setDataContract({ ...dataContract, cnpj: data })
-        queryCityAndState(data.cep);
-        queryIE(document, data.uf);
+      setIsReady(true);
+      const { data } = await axios.get(`https://brasilapi.com.br/api/cnpj/v1/${document}`);
+      setDataQueryCNPJ(data);
+      console.log('Dados CNPJ -> ', data);
+      queryCityAndState(data.cep);
+      queryIE(document, data.uf);
 
-      }
+
     } catch (error) {
 
-      setDataCompany([]);
+      setError(error.response.data.message);
+
+      // console.log(error.response.data.message);
+
+      setDataQueryCNPJ([]);
+
     }
     finally {
 
@@ -90,12 +111,24 @@ export const RegisterNewCompany = () => {
     }
   }
 
+  const formatMoney = (numberValue) => {
+
+    if (typeof numberValue === 'number') {
+      numberValue = numberValue.toString();
+    }
+
+    return parseFloat(numberValue)
+      .toFixed(2) // casas decimais
+      .replace('.', ',')
+      .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+  }
+
   const queryCityAndState = async (cep) => {
     try {
       setIsReady(true)
       const { data } = await axios.get(`https://brasilapi.com.br/api/cep/v2/${cep}`);
-      setDataContract({ ...dataContract, ...data })
-      setDataCity(data);
+      setDataQueryCityAndState(data);
+      console.log('Dados CIDADE -> ', data);
     } catch (error) {
       console.log('erro consulta CIDADE&ESTADO');
     }
@@ -109,17 +142,16 @@ export const RegisterNewCompany = () => {
     const keys = ['06de3304-b4f7-4c1d-ad1e-efca02c59872-139c8fce-2431-423d-9e27-b853e6df2e25', '94ba3490-1f0f-44b5-8d70-cbc284c6d2ea-990eb578-b185-412b-b813-fe00f288b70a']
     const keyToUse = keys[Math.floor(Math.random() * 2)];
 
-
-
     try {
       const { data } = await axios.get(`https://api.cnpja.com/office/${cnpj}?registrations=${state}`, {
         headers: {
           'Authorization': keyToUse,
         }
       });
-      console.log(data);
-      setDataContract({ ...dataContract, ...data })
-      setIe(data.registrations[0].number);
+
+      setDataQueryCNPJIE(data);
+      console.log('Dados IE -> ', data);
+
     } catch (error) {
       console.log('erro consulta IE');
 
@@ -138,17 +170,83 @@ export const RegisterNewCompany = () => {
 
   const handleSave = (e) => {
     e.preventDefault();
-    console.log('dados do formulario => ', dataContract);
-    alert('enviado  ')
   }
 
   const handleChangePlan = (e) => {
-    console.log(e.target.value, planos);
-
+    setSelectedPlan(e.target.value);
+    setDataContact({ ...dataContact, selectedPlan: e.target.value });
   }
 
-  const handleExportData = () => {
-    console.log('dados da empresa -> ', dataContract)
+  const handleChangePaymentMethod = (e) => {
+    setSelectedPaymentMethod(e.target.value);
+    setDataContact({ ...dataContact, selectedPaymentMethod: e.target.value });
+  }
+
+  const handleExportData = (e) => {
+
+
+    const data = {
+
+      company_data: {
+        company_name: dataQueryCNPJ?.razao_social,
+        fantasy_name: dataQueryCNPJ?.nome_fantasia,
+        cnpj: dataQueryCNPJ?.cnpj,
+        state_registration: dataQueryIE?.registrations[0].number,
+        email: dataQueryIE?.emails[0].address,
+        port: dataQueryCNPJ?.porte,
+        situation_register: dataQueryCNPJ?.descricao_situacao_cadastral,
+
+        adress: {
+          street: dataQueryCNPJ?.logradouro,
+          number: dataQueryCNPJ?.numero,
+          district: dataQueryCNPJ?.bairro,
+          zip_code: dataQueryCNPJ?.cep,
+          state: dataQueryCNPJ?.uf,
+          city_name: dataQueryCNPJ?.municipio,
+        },
+
+      },
+
+
+      contact: {
+        name: dataContact?.contact_name,
+        phone: dataContact?.contact_phone,
+      },
+
+      owner_data: {
+        name: dataOwner?.nameOwner,
+        cpf: dataOwner?.cpf,
+        phone: dataOwner?.phoneOwner,
+      },
+
+      contract_data: {
+        plan_selected: selectedPlan,
+        number_of_computer: dataContract?.numberOfComputers,
+        date_of_instalation: dataContract?.dateInstalations,
+        value_of_instalation: dataContract?.valueInstalations,
+        bank_slip_date: dataContract?.bankSlipDate,
+        value_monthly: dataContract?.valueOfMonthly,
+        due_day: dataContract?.dueDay,
+        due_month_and_year: dataContract?.dueMounthYear,
+        contract_validation: dataContract?.proposalDate,
+        contract_notes: dataContract?.notes,
+        payment_method: selectedPaymentMethod,
+        created_at: new Date()
+
+      }
+
+
+    }
+
+
+    e.preventDefault();
+
+
+    history.push({
+      pathname: '/pdf',
+      state: { data },
+
+    });
   }
 
   return (
@@ -163,8 +261,9 @@ export const RegisterNewCompany = () => {
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <h2 style={{ paddingRight: '1rem' }} >Dados da empresa</h2>
 
-              {/* {dataCompany && dataCompany.descricao_situacao_cadastral === 'ATIVA' && <Chip label="Empresa ativaA" color={"primary"} />} */}
-              {dataCompany && dataCompany.descricao_situacao_cadastral === 'BAIXADA' && <Chip label={`${dataCompany.descricao_situacao_cadastral} / ${dataCompany.descricao_motivo_situacao_cadastral}`} color={"error"} />}
+              {dataQueryCNPJ && dataQueryCNPJ.descricao_situacao_cadastral === 'BAIXADA' && <Chip label={`${dataQueryCNPJ.descricao_situacao_cadastral} / ${dataQueryCNPJ.descricao_motivo_situacao_cadastral}`} color={"error"} />}
+              {error && <Chip label={error} color={"error"} />}
+
 
             </div>
 
@@ -172,7 +271,6 @@ export const RegisterNewCompany = () => {
 
               <TextField
                 InputLabelProps={{ shrink: true }}
-                value={cnpj}
                 onChange={e => setCnpj(maskCNPJ(e.target.value))}
                 onKeyPress={e => handleKeyPress(e)}
                 onBlur={queryCNPJ}
@@ -184,7 +282,7 @@ export const RegisterNewCompany = () => {
 
               <TextField
                 InputLabelProps={{ shrink: true }}
-                value={dataCompany?.nome_fantasia}
+                value={dataQueryCNPJ?.nome_fantasia}
                 fullWidth id="outlined-basic"
                 label="Nome fantasia"
                 variant="outlined"
@@ -193,7 +291,8 @@ export const RegisterNewCompany = () => {
 
               <TextField
                 InputLabelProps={{ shrink: true }}
-                value={dataContract?.contact}
+                value={dataContact?.contact_name}
+                onChange={e => setDataContact({ ...dataContact, contact_name: e.target.value })}
                 fullWidth id="outlined-basic"
                 label="Contato"
                 sx={{ maxWidth: '25ch' }}
@@ -202,7 +301,8 @@ export const RegisterNewCompany = () => {
 
               <TextField
                 InputLabelProps={{ shrink: true }}
-                value={dataContract?.foneContact}
+                value={dataContact?.contact_phone && maskPhone(dataContact?.contact_phone)}
+                onChange={e => setDataContact({ ...dataContact, contact_phone: e.target.value })}
                 fullWidth id="outlined-basic"
                 label="Telefone"
                 sx={{ maxWidth: '25ch' }}
@@ -216,7 +316,7 @@ export const RegisterNewCompany = () => {
 
               <TextField
                 InputLabelProps={{ shrink: true }}
-                value={dataCompany?.razao_social}
+                value={dataQueryCNPJ?.razao_social}
                 fullWidth id="outlined-basic"
                 label="Razão social"
                 disabled
@@ -224,7 +324,7 @@ export const RegisterNewCompany = () => {
 
               <TextField
                 InputLabelProps={{ shrink: true }}
-                value={ie}
+                value={dataQueryIE?.registrations !== undefined ? dataQueryIE?.registrations[0].number : ''}
                 fullWidth id="outlined-basic"
                 label="Inscrição estadual"
                 variant="outlined"
@@ -236,7 +336,7 @@ export const RegisterNewCompany = () => {
 
               <TextField
                 InputLabelProps={{ shrink: true }}
-                value={dataCompany?.data_inicio_atividade && format(new Date(dataCompany?.data_inicio_atividade), 'dd/MM/yyyy')}
+                value={dataQueryCNPJ?.data_inicio_atividade && format(new Date(dataQueryCNPJ?.data_inicio_atividade), 'dd/MM/yyyy')}
                 fullWidth id="outlined-basic"
                 label="Data de inicio de atividade"
                 variant="outlined"
@@ -248,7 +348,7 @@ export const RegisterNewCompany = () => {
             <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
               <TextField
                 InputLabelProps={{ shrink: true }}
-                value={dataCompany?.logradouro}
+                value={dataQueryCNPJ?.logradouro}
                 fullWidth id="outlined-basic"
                 label="Endereço"
                 variant="outlined"
@@ -257,9 +357,8 @@ export const RegisterNewCompany = () => {
 
 
               <TextField
-                value={dataCompany?.numero}
+                value={dataQueryCNPJ?.numero}
                 InputLabelProps={{ shrink: true }}
-                onChange={e => setDataCompany({ ...dataCompany, numero: e.target.value })}
                 fullWidth id="outlined-basic"
                 label="Número"
                 variant="outlined"
@@ -267,7 +366,7 @@ export const RegisterNewCompany = () => {
                 sx={{ maxWidth: '10ch' }} />
 
               <TextField
-                value={dataCompany?.bairro}
+                value={dataQueryCNPJ?.bairro}
                 InputLabelProps={{ shrink: true }}
                 fullWidth id="outlined-basic"
                 label="Bairro"
@@ -277,7 +376,7 @@ export const RegisterNewCompany = () => {
               />
 
               <TextField
-                value={dataCity.state}
+                value={dataQueryCNPJ.uf}
                 InputLabelProps={{ shrink: true }}
                 fullWidth id="outlined-basic"
                 label="UF"
@@ -286,7 +385,7 @@ export const RegisterNewCompany = () => {
                 sx={{ maxWidth: '10ch' }} />
 
               <TextField
-                value={dataCity?.city}
+                value={dataQueryCityAndState?.city !== undefined ? dataQueryCityAndState?.city : ''}
                 InputLabelProps={{ shrink: true }}
                 fullWidth id="outlined-basic"
                 label="Cidade"
@@ -295,7 +394,7 @@ export const RegisterNewCompany = () => {
                 sx={{ maxWidth: '25ch' }} />
 
               <TextField
-                value={dataCompany?.complemento}
+                value={dataQueryCNPJ?.complemento}
                 InputLabelProps={{ shrink: true }}
                 fullWidth id="outlined-basic"
                 label="Complemento"
@@ -308,17 +407,17 @@ export const RegisterNewCompany = () => {
 
               <TextField
                 InputLabelProps={{ shrink: true }}
-                value={dataCompany?.porte}
+                value={dataQueryCNPJ?.porte}
                 fullWidth id="outlined-basic"
                 label="Porte"
                 variant="outlined"
                 disabled
                 sx={{ maxWidth: '25ch' }} />
 
-              {dataCompany?.opcao_pelo_simples ?
+              {dataQueryCNPJ?.opcao_pelo_simples ?
                 <TextField
                   InputLabelProps={{ shrink: true }}
-                  value={dataCompany?.opcao_pelo_simples && 'Simples nacional'}
+                  value={dataQueryCNPJ?.opcao_pelo_simples && 'Simples Nacional'}
                   fullWidth id="outlined-basic"
                   label="Regime tributário"
                   variant="outlined"
@@ -330,7 +429,7 @@ export const RegisterNewCompany = () => {
 
                 <TextField
                   InputLabelProps={{ shrink: true }}
-                  value={dataCompany?.opcao_pelo_simples && 'Simples nacional'}
+                  value={dataQueryCNPJ?.opcao_pelo_simples && 'Microeemprendedor Individual'}
                   fullWidth id="outlined-basic"
                   label="Regime tributário"
                   variant="outlined"
@@ -341,7 +440,7 @@ export const RegisterNewCompany = () => {
               }
 
               <TextField
-                value={dataCompany?.cnae_fiscal}
+                value={dataQueryCNPJ?.cnae_fiscal}
                 InputLabelProps={{ shrink: true }}
                 fullWidth id="outlined-basic"
                 label="CNAE fiscal"
@@ -349,7 +448,7 @@ export const RegisterNewCompany = () => {
                 sx={{ maxWidth: '20ch' }} />
 
               <TextField
-                value={dataCompany?.cnae_fiscal_descricao}
+                value={dataQueryCNPJ?.cnae_fiscal_descricao}
                 InputLabelProps={{ shrink: true }}
                 fullWidth id="outlined-basic"
                 label="CNAE fiscal descrição"
@@ -370,29 +469,29 @@ export const RegisterNewCompany = () => {
             <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
 
               <TextField
-                value={dataContract?.nameOwner}
-                onChange={e => setDataContract({ ...dataContract, nameOwner: e.target.value })}
+                value={dataOwner?.nameOwner}
+                onChange={e => setDataOwner({ ...dataOwner, nameOwner: e.target.value })}
                 InputLabelProps={{ shrink: true }}
-                fullWidth id="outlined-basic"
+                fullWidth
                 label="Nome"
                 required
                 variant="outlined" />
 
               <TextField
-                value={dataContract?.cpf}
-                onChange={e => setDataContract({ ...dataContract, cpf: maskCPF(e.target.value) })}
+                value={dataOwner?.cpf && maskCPF(dataOwner?.cpf)}
+                onChange={e => setDataOwner({ ...dataOwner, cpf: e.target.value })}
                 InputLabelProps={{ shrink: true }}
-                fullWidth id="outlined-basic"
+                fullWidth
                 label="CPF "
                 required
                 variant="outlined"
                 sx={{ maxWidth: '35ch' }} />
 
               <TextField
-                value={dataContract?.phone}
-                onChange={e => setDataContract({ ...dataContract, phone: maskPhone(e.target.value) })}
+                value={dataOwner?.phoneOwner && maskPhone(dataOwner?.phoneOwner)}
+                onChange={e => setDataOwner({ ...dataOwner, phoneOwner: e.target.value })}
                 InputLabelProps={{ shrink: true }}
-                fullWidth id="outlined-basic"
+                fullWidth
                 label="Telefone"
                 required
                 variant="outlined"
@@ -411,9 +510,8 @@ export const RegisterNewCompany = () => {
             <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
 
               <TextField
-                value={dataContract?.selectedPlan ? dataContract?.selectedPlan : setDataContract({ ...dataContract, selectedPlan: planos[1].nome })}
+                value={dataContract?.selectedPlan ? dataContract?.selectedPlan : selectedPlan}
                 onChange={handleChangePlan}
-                // onChange={e => setDataContract({ ...dataContract, selectedPlan: e.target.value })}
                 id="outlined-select-currency"
                 select
                 fullWidth
@@ -428,8 +526,8 @@ export const RegisterNewCompany = () => {
               </TextField>
 
               <TextField
-                value={dataContract?.numberTerminals ? dataContract?.numberTerminals : setDataContract({ ...dataContract, numberTerminals: 1 })}
-                onChange={e => setDataContract({ ...dataContract, numberTerminals: e.target.value })}
+                value={dataContract?.numberOfComputers ? dataContract?.numberOfComputers : setDataContract({ ...dataContract, numberOfComputers: 1 })}
+                onChange={e => setDataContract({ ...dataContract, numberOfComputers: e.target.value })}
                 id="outlined-select-currency"
                 fullWidth
                 type={'number'}
@@ -452,7 +550,7 @@ export const RegisterNewCompany = () => {
               <FormControl  >
                 <InputLabel htmlFor="outlined-adornment-amount">Valor implantação</InputLabel>
                 <OutlinedInput
-                  value={dataContract?.valueInstalations ? dataContract?.valueInstalations : setDataContract({ ...dataContract, valueInstalations: planos[1].instalation })}
+                  value={dataContract?.valueInstalations ? formatMoney(dataContract?.valueInstalations) : setDataContract({ ...dataContract, valueInstalations: planos[1].instalation })}
                   onChange={e => setDataContract({ ...dataContract, valueInstalations: e.target.value })}
                   id="outlined-adornment-amount"
                   startAdornment={<InputAdornment position="start">R$</InputAdornment>}
@@ -460,26 +558,51 @@ export const RegisterNewCompany = () => {
                 />
               </FormControl>
 
+              <TextField
+                InputLabelProps={{ shrink: true }}
+                // value={selectedPaymentMethod}
+                value={selectedPaymentMethod}
+                // value={dataContract?.selectedPaymentMethod ? dataContract?.selectedPaymentMethod : setDataContract({ ...dataContract, selectedPaymentMethod: selectedPaymentMethod })}
+                onChange={handleChangePaymentMethod}
+                select
+                fullWidth
+                label="Forma de pagamento"
+                sx={{ maxWidth: '25ch' }}
+              >
+                {paymentMethods.map((option) => (
+                  <MenuItem key={option.id} value={option.nome} >
+                    {option.nome}
+                  </MenuItem>
+                ))}
+              </TextField>
+
+
+
+            </Box>
+
+            <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+
+
               <LocalizationProvider dateAdapter={AdapterDateFns} locale={brLocale}>
                 <div>
                   <DatePicker
                     mask={'__/__/____'}
-                    value={dataContract?.dateInstalations ? dataContract?.dateInstalations : setDataContract({ ...dataContract, dateInstalations: addDays(currentDate, 3) })}
-                    onChange={e => setDataContract({ ...dataContract, dateInstalations: e })}
+                    value={dataContract?.bankSlipDate ? dataContract?.bankSlipDate : setDataContract({ ...dataContract, bankSlipDate: addDays(currentDate, 3) })}
+                    // value={dataContract?.dateInstalations ? dataContract?.dateInstalations : setDataContract({ ...dataContract, dateInstalations: addDays(currentDate, 3) })}
+
+                    onChange={e => setDataContract({ ...dataContract, bankSlipDate: e })}
                     label="Vencimento do pagamento instalação"
                     renderInput={(params) => <TextField {...params} />}
                   />
                 </div>
               </LocalizationProvider>
 
-            </Box>
 
-            <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
 
               <FormControl  >
                 <InputLabel htmlFor="outlined-adornment-amount">Valor mensalidade</InputLabel>
                 <OutlinedInput
-                  value={dataContract?.valueOfMonthly ? dataContract?.valueOfMonthly : setDataContract({ ...dataContract, valueOfMonthly: planos[1].mountPrice })}
+                  value={dataContract?.valueOfMonthly ? formatMoney(dataContract?.valueOfMonthly) : setDataContract({ ...dataContract, valueOfMonthly: planos[1].mountPrice })}
                   onChange={e => setDataContract({ ...dataContract, valueOfMonthly: e.target.value })}
                   id="outlined-adornment-amount"
                   startAdornment={<InputAdornment position="start">R$</InputAdornment>}
@@ -528,15 +651,14 @@ export const RegisterNewCompany = () => {
 
             <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
               <TextField
+                value={dataContract?.notes ? dataContract?.notes : ''}
+                onChange={e => setDataContract({ ...dataContract, notes: e.target.value })}
                 InputLabelProps={{ shrink: true }}
-                id="outlined-multiline-flexible"
                 label="Observações"
                 fullWidth
                 type={'text'}
                 multiline
                 rows={5}
-                // onChange={e => setDataContract({ ...dataContract, notes: e })}
-                // value={dataContract?.notes ? dataContract?.notes.toString() : ''}
                 sx={{}}
               />
             </Box>

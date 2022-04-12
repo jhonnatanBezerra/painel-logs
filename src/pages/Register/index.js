@@ -12,7 +12,7 @@ import {
 import PersonIcon from '@mui/icons-material/Person';
 import LockIcon from '@mui/icons-material/Lock';
 
-export const Login = () => {
+export const Register = () => {
   return (
     <div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'url(https://sisecf.com/img/intro-bg.webp)', backgroundRepeat: 'no-repeat', objectFit: 'contain' }}>
 
@@ -24,6 +24,24 @@ export const Login = () => {
 
           <Box sx={{ display: 'flex', flexDirection: "column", gap: 3, mb: 2, width: '300px' }}>
 
+            {/* Nome */}
+            <TextField
+              id="input-with-icon-textfield"
+              label="Nome"
+              fullWidth
+              type="text"
+              required
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <PersonIcon />
+                  </InputAdornment>
+                ),
+              }}
+              variant="outlined"
+            />
+
+            {/* E-mail */}
             <TextField
               id="input-with-icon-textfield"
               label="E-mail"
@@ -40,6 +58,8 @@ export const Login = () => {
               variant="outlined"
             />
 
+            {/* Senha */}
+
             <TextField
               id="input-with-icon-textfield"
               label="Senha"
@@ -55,7 +75,23 @@ export const Login = () => {
               variant="outlined"
             />
 
-            <Button sx={{}} type="submit" variant="contained" size="large">Entrar</Button>
+            {/* Confirmar senha */}
+            <TextField
+              id="input-with-icon-textfield"
+              label="Confirmar senha"
+              type="password"
+              required
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <LockIcon />
+                  </InputAdornment>
+                ),
+              }}
+              variant="outlined"
+            />
+
+            <Button type="submit" variant="contained" size="large">Registrar-se</Button>
 
           </Box>
 
@@ -63,8 +99,8 @@ export const Login = () => {
 
         <Box sx={{ display: 'flex', flexDirection: "column", gap: 2, mb: 2, alignItems: 'center' }}>
 
-          <a href="#" style={{ fontSize: '14px', color: '#2280FF' }}>Criar conta</a>
-          <a href="#" style={{ fontSize: '14px', color: '#2280FF' }}>Esqueci minha senha</a>
+          <a href="#" style={{ fontSize: '14px', color: '#2280FF' }}>Já tenho uma conta</a>
+
         </Box>
 
       </div>

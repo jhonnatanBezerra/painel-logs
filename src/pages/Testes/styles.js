@@ -4,8 +4,8 @@ import styled from 'styled-components'
 export const WrapperAside = styled.aside`
   height: 100vh;
   background:  #FFF;
-  min-width: 16%;
-  width: 16%;
+  min-width: 14%;
+  width: 14%;
   border-right: 1px solid #e1e1e1;
   padding: 2rem 1rem 1rem;
   display: flex;
@@ -65,9 +65,6 @@ export const DirectLinksWrapper = styled.div`
     }
 
 `;
-
-
-
 
 export const FooterAsideWrapper = styled.div`
   display: flex;
