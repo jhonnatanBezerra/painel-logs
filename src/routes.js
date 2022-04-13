@@ -7,6 +7,7 @@ import { RegisterNewCompany } from './pages/RegisterNewCompany';
 import { Register } from './pages/Register';
 import { Atendimento } from './pages/Atendimento';
 import { PDFModel } from './pages/PDFModel';
+import { NovoContrato } from './pages/NovoContrato';
 
 
 export const Routes = () => {
@@ -21,6 +22,7 @@ export const Routes = () => {
         <Route path="/newUser" exact component={Register} />
         <Route path="/atendimento" exact component={Atendimento} />
         <Route path="/pdf" exact component={PDFModel} />
+        <Route path="/contrato" exact component={NovoContrato} />
 
       </Switch>
     </BrowserRouter>

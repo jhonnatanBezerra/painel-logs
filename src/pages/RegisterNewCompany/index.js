@@ -183,7 +183,74 @@ export const RegisterNewCompany = () => {
   }
 
   const handleExportData = (e) => {
+    e.preventDefault();
 
+    const data = {
+
+      company_data: {
+        company_name: dataQueryCNPJ?.razao_social,
+        fantasy_name: dataQueryCNPJ?.nome_fantasia,
+        cnpj: dataQueryCNPJ?.cnpj,
+        state_registration: dataQueryIE?.registrations[0].number,
+        email: dataQueryIE?.emails[0].address,
+        port: dataQueryCNPJ?.porte,
+        situation_register: dataQueryCNPJ?.descricao_situacao_cadastral,
+
+        adress: {
+          street: dataQueryCNPJ?.logradouro,
+          number: dataQueryCNPJ?.numero,
+          district: dataQueryCNPJ?.bairro,
+          zip_code: dataQueryCNPJ?.cep,
+          state: dataQueryCNPJ?.uf,
+          city_name: dataQueryCNPJ?.municipio,
+          type_adress: dataQueryCNPJ?.descricao_tipo_de_logradouro,
+        },
+
+      },
+
+
+      contact: {
+        name: dataContact?.contact_name,
+        phone: dataContact?.contact_phone,
+      },
+
+      owner_data: {
+        name: dataOwner?.nameOwner,
+        cpf: dataOwner?.cpf,
+        phone: dataOwner?.phoneOwner,
+      },
+
+      contract_data: {
+        plan_selected: selectedPlan,
+        number_of_computer: dataContract?.numberOfComputers,
+        date_of_instalation: dataContract?.dateInstalations,
+        value_of_instalation: dataContract?.valueInstalations,
+        bank_slip_date: dataContract?.bankSlipDate,
+        value_monthly: dataContract?.valueOfMonthly,
+        due_day: dataContract?.dueDay,
+        due_month_and_year: dataContract?.dueMounthYear,
+        contract_validation: dataContract?.proposalDate,
+        contract_notes: dataContract?.notes,
+        payment_method: selectedPaymentMethod,
+        created_at: new Date()
+
+      }
+
+
+    }
+
+
+
+
+
+    history.push({
+      pathname: '/pdf',
+      state: { data },
+    });
+  }
+
+  const handleGenerateContract = (e) => {
+    e.preventDefault();
 
     const data = {
 
@@ -239,14 +306,16 @@ export const RegisterNewCompany = () => {
     }
 
 
-    e.preventDefault();
+
 
 
     history.push({
-      pathname: '/pdf',
+      pathname: '/contrato',
       state: { data },
-
     });
+
+
+
   }
 
   return (
@@ -707,9 +776,14 @@ export const RegisterNewCompany = () => {
           </Box>
 
           <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+
+
+            <Button onClick={handleGenerateContract} sx={{ width: '25ch', }} color="success" variant="contained">Gerar contrato</Button>
+
             <Button type="submit" sx={{ width: '25ch' }} variant="contained">Salvar</Button>
 
             <Button sx={{ width: '25ch', }} onClick={handleExportData} color="success" variant="contained">Exportar dados</Button>
+
           </Box>
 
 
