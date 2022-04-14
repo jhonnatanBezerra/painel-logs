@@ -1,0 +1,15 @@
+.contato{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 800px;
+}
+.link{
+display: flex;
+align-items: center;
+justify-content: center;
+flex-direction: row;
+margin-left: 20px;
+margin-right: 20px;
+}

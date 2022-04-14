@@ -51,8 +51,6 @@ export const RegisterNewCompany = () => {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(paymentMethods[0].nome);
   const [error, setError] = useState('');
 
-  const [data, setData] = useState
-
 
   const history = useHistory();
 
